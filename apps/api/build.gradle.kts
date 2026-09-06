@@ -26,5 +26,6 @@ dependencies {
     implementation(libs.logback.classic)
 
     testImplementation(kotlin("test"))
+    testImplementation(ktorLibs.client.contentNegotiation)
     testImplementation(ktorLibs.server.testHost)
 }

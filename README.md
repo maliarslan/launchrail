@@ -1,8 +1,18 @@
 # LaunchRail
 
-LaunchRail is a portfolio-grade internal developer platform for managing application deployments and releases across environments such as staging and production.
+LaunchRail is a learning and portfolio project: an internal developer platform for managing application deployments and releases across environments such as staging and production.
 
-The project is intentionally built as a production-oriented modular monolith. It is designed to demonstrate full-stack engineering across frontend, backend, persistence, infrastructure, CI/CD, and observability.
+It is not a commercial product. The goal is to demonstrate production-oriented full-stack engineering across frontend, backend, persistence, infrastructure, CI/CD, and observability.
+
+The project is intentionally built as a modular monolith to keep the system realistic while staying focused enough for a solo learning project.
+
+## Project Goals
+
+- Practice building a production-style full-stack application end to end
+- Demonstrate backend architecture, domain modeling, persistence, and testing
+- Demonstrate frontend application structure, routing, UI composition, and API integration
+- Explore infrastructure topics such as Docker, CI/CD, Kubernetes, and observability
+- Keep the scope realistic for a portfolio project rather than a commercial product
 
 ## Tech Stack
 

@@ -95,6 +95,24 @@ ktor:
       - com.launchrail.ApplicationKt.module
 ```
 
+## OpenAPI Direction
+
+LaunchRail will expose an OpenAPI contract for its REST API.
+
+OpenAPI is not implemented in the foundation milestone yet. The first version of the API only includes technical endpoints such as `/health`.
+
+Before adding product endpoints, the project should choose how OpenAPI will be generated or maintained.
+
+Options to evaluate:
+
+- generate OpenAPI from Ktor route definitions and typed request/response models
+- maintain an OpenAPI specification manually
+- use contract-first API design and generate server/client types from the specification
+
+The preferred direction is to keep OpenAPI close to the backend implementation while avoiding duplicated route definitions.
+
+This decision should be recorded in an ADR before the first product API endpoints are introduced.
+
 ## Commands
 
 Run tests:

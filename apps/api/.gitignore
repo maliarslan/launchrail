@@ -1,0 +1,8 @@
+.kotlin
+*.iml
+build
+build/**
+target
+.gradle
+local.properties
+*.lock

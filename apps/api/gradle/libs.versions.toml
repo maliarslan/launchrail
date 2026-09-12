@@ -4,6 +4,7 @@ kotlin = "2.4.0"
 liquibase = "5.0.1"
 logback = "1.5.37"
 postgresql = "42.7.8"
+testcontainers = "1.21.3"
 
 [libraries]
 exposed-core = { module = "org.jetbrains.exposed:exposed-core", version.ref = "exposed" }
@@ -12,6 +13,7 @@ exposed-jdbc = { module = "org.jetbrains.exposed:exposed-jdbc", version.ref = "e
 liquibase-core = { module = "org.liquibase:liquibase-core", version.ref = "liquibase" }
 logback-classic = { module = "ch.qos.logback:logback-classic", version.ref = "logback" }
 postgresql = { module = "org.postgresql:postgresql", version.ref = "postgresql" }
+testcontainers-postgresql = { module = "org.testcontainers:postgresql", version.ref = "testcontainers" }
 
 [plugins]
 kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }

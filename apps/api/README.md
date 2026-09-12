@@ -14,19 +14,28 @@ This app starts as the backend foundation for the LaunchRail modular monolith. P
 - kotlinx.serialization
 - JUnit/Kotlin test
 - Ktor test host
+- PostgreSQL
+- Liquibase
+- Exposed DSL
+- Testcontainers
 
 ## Current Scope
 
-The current API scope is foundation only:
+The current API scope includes the backend foundation and first persistence slice:
 
-- application startup through Ktor `LaunchRail`
+- application startup through Ktor
 - YAML-based runtime configuration
 - JSON serialization
 - centralized error response baseline
 - health endpoint
-- basic endpoint test
+- PostgreSQL local development database
+- Liquibase migration CLI
+- first `applications` table migration
+- `ManagedApplication` domain model
+- repository interface and Exposed repository implementation
+- Testcontainers-backed repository integration test
 
-No database, Liquibase migrations, authentication, authorization, deployment workflows, or product entities are implemented yet.
+Authentication, authorization, deployment workflows, and product API endpoints are not implemented yet.
 
 ## Source Structure
 
@@ -34,12 +43,27 @@ No database, Liquibase migrations, authentication, authorization, deployment wor
 src/main/kotlin/com/launchrail/
 ├── Application.kt
 ├── Routing.kt
-└── api/
-    ├── Serialization.kt
-    ├── errors/
-    │   └── ErrorHandling.kt
-    └── health/
-        └── HealthRoutes.kt
+├── application/
+│   └── ManagedApplicationRepository.kt
+├── api/
+│   ├── Serialization.kt
+│   ├── errors/
+│   │   └── ErrorHandling.kt
+│   └── health/
+│       └── HealthRoutes.kt
+├── domain/
+│   ├── EntityId.kt
+│   └── ManagedApplication.kt
+└── infrastructure/
+    └── persistence/
+        ├── DatabaseConfig.kt
+        ├── DatabaseFactory.kt
+        ├── applications/
+        │   ├── ApplicationsTable.kt
+        │   └── ExposedManagedApplicationRepository.kt
+        └── liquibase/
+            ├── LiquibaseMigrator.kt
+            └── MigrationMain.kt
 ```
 
 ### `Application.kt`
@@ -70,6 +94,18 @@ Defines the technical health endpoint:
 GET /health
 ```
 
+### `domain`
+
+Contains framework-independent domain models such as `ManagedApplication`.
+
+### `application`
+
+Contains application-layer contracts such as `ManagedApplicationRepository`.
+
+### `infrastructure/persistence`
+
+Contains database configuration, Exposed table mappings, repository implementations, and Liquibase migration tooling.
+
 ## Runtime Configuration
 
 The application uses YAML configuration:
@@ -93,6 +129,55 @@ ktor:
   application:
     modules:
       - com.launchrail.ApplicationKt.module
+```
+
+Local database settings are read from:
+
+```text
+src/main/resources/application-local.yaml
+```
+
+This file is ignored by Git. Use the example file as a template:
+
+```bash
+cp src/main/resources/application-local.example.yaml src/main/resources/application-local.yaml
+```
+
+Example local database config:
+
+```yaml
+database:
+  url: jdbc:postgresql://localhost:5432/launchrail
+  user: launchrail
+  password: launchrail
+```
+
+## PostgreSQL And Migrations
+
+Start the local PostgreSQL database from the repository root:
+
+```bash
+docker compose up -d postgres
+```
+
+Run Liquibase migrations from `apps/api`:
+
+```bash
+./gradlew runMigrations
+```
+
+The migration command is separate from API startup. The API assumes the database schema already exists.
+
+Current master changelog:
+
+```text
+src/main/resources/db/changelog/db.changelog-master.xml
+```
+
+Current migration:
+
+```text
+src/main/resources/db/changelog/changes/0001-create-applications-table.xml
 ```
 
 ## OpenAPI Direction
@@ -120,6 +205,19 @@ Run tests:
 ```bash
 ./gradlew test
 ```
+
+The test suite includes:
+
+- Ktor endpoint tests for `/health` and structured error responses
+- Testcontainers integration tests for PostgreSQL persistence
+
+Testcontainers uses Docker. If Docker Desktop uses a newer Docker API, the test resources include:
+
+```text
+src/test/resources/docker-java.properties
+```
+
+to pin the Docker Java client API version used during tests.
 
 Build the API:
 

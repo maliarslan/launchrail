@@ -32,6 +32,7 @@ dependencies {
     testImplementation(kotlin("test"))
     testImplementation(ktorLibs.client.contentNegotiation)
     testImplementation(ktorLibs.server.testHost)
+    testImplementation(libs.testcontainers.postgresql)
 }
 
 tasks.register<JavaExec>("runMigrations") {

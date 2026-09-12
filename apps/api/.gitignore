@@ -8,3 +8,4 @@ target
 .gradle
 local.properties
 *.lock
+src/main/resources/application-local.yaml

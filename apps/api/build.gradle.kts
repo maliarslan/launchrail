@@ -1,4 +1,3 @@
-
 plugins {
     alias(libs.plugins.kotlin.jvm)
     alias(ktorLibs.plugins.ktor)
@@ -16,6 +15,8 @@ kotlin {
     jvmToolchain(21)
 }
 dependencies {
+    implementation("org.liquibase:liquibase-core:5.0.1")
+    implementation("org.postgresql:postgresql:42.7.8")
     implementation(ktorLibs.serialization.kotlinx.json)
     implementation(ktorLibs.server.callLogging)
     implementation(ktorLibs.server.config.yaml)
@@ -29,3 +30,12 @@ dependencies {
     testImplementation(ktorLibs.client.contentNegotiation)
     testImplementation(ktorLibs.server.testHost)
 }
+
+tasks.register<JavaExec>("runMigrations") {
+    group = "database"
+    description = "Run Liquibase migrations against the configured database."
+
+    classpath = sourceSets["main"].runtimeClasspath
+    mainClass.set("com.launchrail.infrastructure.persistence.liquibase.MigrationMainKt")
+}
+

@@ -1,0 +1,20 @@
+services:
+  postgres:
+    image: postgres:18-alpine
+    container_name: launchrail-postgres
+    environment:
+      POSTGRES_DB: launchrail
+      POSTGRES_USER: launchrail
+      POSTGRES_PASSWORD: launchrail
+    ports:
+      - "5432:5432"
+    volumes:
+      - launchrail-postgres-data:/var/lib/postgresql
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U launchrail -d launchrail" ]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+volumes:
+  launchrail-postgres-data:

@@ -15,8 +15,10 @@ kotlin {
     jvmToolchain(21)
 }
 dependencies {
-    implementation("org.liquibase:liquibase-core:5.0.1")
-    implementation("org.postgresql:postgresql:42.7.8")
+    implementation(libs.exposed.core)
+    implementation(libs.exposed.jdbc)
+    implementation(libs.exposed.java.time)
+    implementation(libs.liquibase.core)
     implementation(ktorLibs.serialization.kotlinx.json)
     implementation(ktorLibs.server.callLogging)
     implementation(ktorLibs.server.config.yaml)
@@ -25,6 +27,7 @@ dependencies {
     implementation(ktorLibs.server.netty)
     implementation(ktorLibs.server.statusPages)
     implementation(libs.logback.classic)
+    implementation(libs.postgresql)
 
     testImplementation(kotlin("test"))
     testImplementation(ktorLibs.client.contentNegotiation)
@@ -38,4 +41,3 @@ tasks.register<JavaExec>("runMigrations") {
     classpath = sourceSets["main"].runtimeClasspath
     mainClass.set("com.launchrail.infrastructure.persistence.liquibase.MigrationMainKt")
 }
-

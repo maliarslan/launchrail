@@ -1,6 +1,6 @@
 package com.launchrail.domain
 
-import kotlin.time.Instant
+import java.time.Instant
 
 typealias ManagedApplicationId = EntityId<ManagedApplication>
 
